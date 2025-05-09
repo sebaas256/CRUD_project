@@ -27,6 +27,7 @@ def mostrar_menu():
             print("Saliendo...")
             break
         else:
+            print("--------------------")
             print("Opción no válida. Intente de nuevo.")
 
 def pacientes():
@@ -52,6 +53,7 @@ def pacientes():
         elif opcion == "5":
             break
         else:
+            print("--------------------")
             print("Opción no válida. Intente de nuevo.")
 
 def citas():
@@ -77,6 +79,7 @@ def citas():
         elif opcion == "5":
             break
         else:
+            print("--------------------")
             print("Opción no válida. Intente de nuevo.")
 
 def consultas():
@@ -102,6 +105,7 @@ def consultas():
         elif opcion == "5":
             break
         else:
+            print("--------------------")
             print("Opción no válida. Intente de nuevo.")
 
 
