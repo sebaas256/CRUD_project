@@ -109,6 +109,8 @@ def consultas():
             print("Opción no válida. Intente de nuevo.")
 
 
+#Pupusas de queso
+
 if __name__ == "__main__":
     mostrar_titulo()
     mostrar_menu()
