@@ -1,4 +1,6 @@
 from utils.ascii import mostrar_titulo
+from DB import Conexion as con
+from logica import Pacientes as pa
 
 def menu_principal():
     print("--------------------")
@@ -39,16 +41,20 @@ def pacientes():
         print("5-Volver al menu principal")
         opcion = input("Seleccione una opción: ")
         if opcion == "1":
+            #pa.AgregarPacientes(con)
             #Codigo para agregar paciente (importar de logica)
             print("")
         elif opcion == "2":
+            #pa.EliminarPaciente(con)
             #Codigo para eliminar paciente (importar de logica)
             print("")
         elif opcion == "3":
-            #Codigo para actualizar paciente (importar de logica)
+            #pa.ActualizarPaciente
+            # Codigo para actualizar paciente (importar de logica)
             print("")
         elif opcion == "4":
-            #Codigo para consultar paciente (importar de logica)
+            #pa.BuscarPaciente(con)
+            # Codigo para consultar paciente (importar de logica)
             print("")
         elif opcion == "5":
             break
