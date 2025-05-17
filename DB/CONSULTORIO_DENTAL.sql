@@ -32,13 +32,13 @@ CREATE TABLE CITAS
 	consultorio varchar(5) not null,
 	descripcion varchar(50) not null,
 	estado_cita bit not null,
-	Dui_Paciente int not null,
+	Dui_Paciente varchar(10) not null,
 
 )
 
 CREATE TABLE PACIENTES 
 (
-		Dui_Paciente int not null,
+		Dui_Paciente varchar(10) not null,
 		Nombres varchar(50) not null,
 		Apellidos varchar (50) not null,
 		fecha_nacimiento date not null,
