@@ -188,9 +188,9 @@ def doctores():
             Id_Doctor = int(input("Digite el Id del doctor: "))
             Nombres = input("Digite los nombres del doctor: ")
             Apellidos = input("Digite los apellidos del doctor: ")
-            telefono = input("Digite el numero de telefono del doctor (sin guiones): ")
+            telefono = int(input("Digite el numero de telefono del doctor (sin guiones): "))
             correo = input("Digite el correo del doctor: ")
-            Id_Espec = int(input("Digite el Id de la especialidad del doctor: \n(Si no sabe el Id de la especialidad consulte en '6-Mostrar especialidades'): "))
+            Id_Espec = int(input("Digite el Id de la especialidad del doctor \n(Si no sabe el Id de la especialidad consulte en '6-Mostrar especialidades'): "))
             doc.agregar_doctor(con, Id_Doctor, Nombres, Apellidos, telefono, correo, Id_Espec)
             
         elif opcion == "2":
@@ -198,17 +198,23 @@ def doctores():
             doc.eliminar_doctor(con, Id_Doctor)
             
         elif opcion == "3":
-            #Codigo para actualizar paciente (importar de logica)
-            print("")
+            Id_Doctor = int(input("Digite el Id del doctor que desea modificar: "))
+            Nombres = input("Digite los nombres del doctor: ")
+            Apellidos = input("Digite los apellidos del doctor: ")
+            telefono = int(input("Digite el numero de telefono del doctor (sin guiones): "))
+            correo = input("Digite el correo del doctor: ")
+            doc.actualizar_doctor(con, Id_Doctor, Nombres, Apellidos, telefono, correo)
+            
         elif opcion == "4":
-            #Codigo para consultar paciente (importar de logica)
-            print("")
+            Id_Doctor = int(input("Digite el Id del doctor que desea consultar: "))
+            print("El doctor consultado es el siguiente: ")
+            doc.buscar_doctor(con, Id_Doctor)
+            
         elif opcion == "5":
             doc.mostrar_doctores(con)
             
         elif opcion == "6":
-            print("")
-              
+            doc.mostrar_especialidades(con)
         elif opcion == "0":
             break
         else:
