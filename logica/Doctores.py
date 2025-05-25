@@ -68,3 +68,14 @@ def buscar_doctor(Conexion, Id_Doctot):
     
     except Exception as ex:
         print("Error al intentar buscar el doctor:", ex)
+        
+def mostrar_especialidad_doctor(Conexion, Id_Doctor):
+    try:
+        cursor = Conexion.cursor()
+        sql = " select doc.Id_Doctor, doc.Nombres, doc.Apellidos, doc_esp.Nombre_esp from DOCTORES doc inner join DOC_ESPC doc_esp on (doc_esp.Id_Espc = doc.Id_Espc) where doc.Id_Doctor = ? "
+        cursor.execute(sql, Id_Doctor)
+        for fila in cursor.fetchall():
+            print(f"{fila}\n")
+    
+    except Exception as ex:
+        print("Error al mostrar las especialidades de los doctores:", ex)

@@ -180,6 +180,7 @@ def doctores():
         print("4-Consultar doctor")
         print("5-Mostrar todos los doctores")
         print("6-Mostar especialidades")
+        print("7-Consultar especialidad de un doctor")
         opcion = input("Seleccione una opción: ")
         
         os.system('cls')
@@ -215,6 +216,12 @@ def doctores():
             
         elif opcion == "6":
             doc.mostrar_especialidades(con)
+            
+        elif opcion == "7":
+            Id_Doctor = int(input("Digite el Id del doctor que desea consultar: "))
+            print("La especialidad del doctor consultado es: ")
+            doc.mostrar_especialidad_doctor(con, Id_Doctor)
+            
         elif opcion == "0":
             break
         else:
