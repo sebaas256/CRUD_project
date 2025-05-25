@@ -1,8 +1,3 @@
--- CREAR Y USAR BASE DE DATOS
-CREATE DATABASE CONSULTORIO_DENTAL
-USE CONSULTORIO_DENTAL
-
--- CREACION DE TABLAS 
 CREATE TABLE DOCTORES 
 (
 	Id_Doctor int not null,
@@ -53,10 +48,10 @@ CREATE TABLE DOC_ESPC
 	Nombre_esp varchar(40) not null,
 )
 
-CREATE TABLE DETA_TRATAM
+CREATE TABLE RECETA
 (
-	Id_Det_Trat int not null,
-	deta_trat varchar(200) not null,
+	Id_Det_Receta int not null,
+	deta_receta varchar(200) not null,
 	Id_Consulta int not null
 )
 
@@ -81,9 +76,9 @@ ALTER TABLE DOC_ESPC
 ADD CONSTRAINT pk_doc_espc
 PRIMARY KEY (Id_Espc)
 
-ALTER TABLE DETA_TRATAM
-ADD CONSTRAINT pk_Det_Trat
-PRIMARY KEY (Id_Det_Trat)
+ALTER TABLE RECETA
+ADD CONSTRAINT pk_Det_Receta
+PRIMARY KEY (Id_Det_Receta)
 
 
 -- CREACION DE LLAVES FORANEAS
@@ -112,7 +107,7 @@ FOREIGN KEY (Dui_Paciente)
 REFERENCES PACIENTES(Dui_Paciente)
 on update cascade on delete no action
 
-ALTER TABLE DETA_TRATAM
+ALTER TABLE RECETA
 ADD CONSTRAINT fk_detatram_consult
 FOREIGN KEY (Id_Consulta)
 REFERENCES CONSULTAS (Id_Consulta)

@@ -1,6 +1,7 @@
 from utils.ascii import mostrar_titulo
 from DB import Conexion as con
 from logica import Pacientes as pa
+from logica import Doctores as doc
 import os
 
 con = con.Conexion()
@@ -172,18 +173,30 @@ def consultas():
 def doctores():
     while True:
         print("Has seleccionado Doctores")
+        print("0-Volver al menu principal")
         print("1-Agregar doctor")
         print("2-Eliminar doctor")
         print("3-Actualizar doctor")
         print("4-Consultar doctor")
-        print("5-Volver al menu principal")
+        print("5-Mostrar todos los doctores")
+        print("6-Mostar especialidades")
         opcion = input("Seleccione una opción: ")
+        
+        os.system('cls')
+        
         if opcion == "1":
-            #Codigo para agregar paciente (importar de logica)
-            print("")
+            Id_Doctor = int(input("Digite el Id del doctor: "))
+            Nombres = input("Digite los nombres del doctor: ")
+            Apellidos = input("Digite los apellidos del doctor: ")
+            telefono = input("Digite el numero de telefono del doctor (sin guiones): ")
+            correo = input("Digite el correo del doctor: ")
+            Id_Espec = int(input("Digite el Id de la especialidad del doctor: \n(Si no sabe el Id de la especialidad consulte en '6-Mostrar especialidades'): "))
+            doc.agregar_doctor(con, Id_Doctor, Nombres, Apellidos, telefono, correo, Id_Espec)
+            
         elif opcion == "2":
-            #Codigo para eliminar paciente (importar de logica)
-            print("")
+            Id_Doctor = int(input("Digite el Id del doctor que desea eliminar: "))
+            doc.eliminar_doctor(con, Id_Doctor)
+            
         elif opcion == "3":
             #Codigo para actualizar paciente (importar de logica)
             print("")
@@ -191,6 +204,12 @@ def doctores():
             #Codigo para consultar paciente (importar de logica)
             print("")
         elif opcion == "5":
+            doc.mostrar_doctores(con)
+            
+        elif opcion == "6":
+            print("")
+              
+        elif opcion == "0":
             break
         else:
             print("--------------------")
