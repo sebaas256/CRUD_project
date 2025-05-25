@@ -19,19 +19,19 @@ def mostrar_menu():
         opcion = input("Seleccione una opción: ")
         if opcion == "1":
             print("--------------------")
-            print("Has seleccionado Pacientes")
+            os.system('cls')
             pacientes()
         elif opcion == "2":
             print("--------------------")
-            print("Has seleccionado Citas")
+            os.system('cls')
             citas()
         elif opcion == "3":
             print("--------------------")
-            print("Has seleccionado Consultas")
+            os.system('cls')
             consultas()
         elif opcion == "4":
             print("--------------------")
-            print("Has seleccionado Doctores")
+            os.system('cls')
             doctores()
         elif opcion == "5":
             print("Saliendo...")
@@ -42,6 +42,7 @@ def mostrar_menu():
 
 def pacientes():
     while True:
+        print("Has seleccionado Pacientes")
         print("1-Agregar Paciente")
         print("2-Eliminar Paciente")
         print("3-Actualizar Paciente")
@@ -107,9 +108,12 @@ def pacientes():
         else:
             print("--------------------")
             print("Opción no válida. Intente de nuevo.")
+            print("--------------------")
+            
 
 def citas():
     while True:
+        print("Has seleccionado Citas")
         print("1-Agregar cita")
         print("2-Eliminar cita")
         print("3-Actualizar cita")
@@ -133,9 +137,12 @@ def citas():
         else:
             print("--------------------")
             print("Opción no válida. Intente de nuevo.")
+            print("--------------------")
+            
 
 def consultas():
     while True:
+        print("Has seleccionado Consultas")  
         print("1-Agregar consulta")
         print("2-Eliminar consulta")
         print("3-Actualizar consulta")
@@ -159,7 +166,37 @@ def consultas():
         else:
             print("--------------------")
             print("Opción no válida. Intente de nuevo.")
-
+            print("--------------------")
+            
+            
+def doctores():
+    while True:
+        print("Has seleccionado Doctores")
+        print("1-Agregar doctor")
+        print("2-Eliminar doctor")
+        print("3-Actualizar doctor")
+        print("4-Consultar doctor")
+        print("5-Volver al menu principal")
+        opcion = input("Seleccione una opción: ")
+        if opcion == "1":
+            #Codigo para agregar paciente (importar de logica)
+            print("")
+        elif opcion == "2":
+            #Codigo para eliminar paciente (importar de logica)
+            print("")
+        elif opcion == "3":
+            #Codigo para actualizar paciente (importar de logica)
+            print("")
+        elif opcion == "4":
+            #Codigo para consultar paciente (importar de logica)
+            print("")
+        elif opcion == "5":
+            break
+        else:
+            print("--------------------")
+            print("Opción no válida. Intente de nuevo.")
+            print("--------------------")
+            
 
 #Pupusas de queso
 
