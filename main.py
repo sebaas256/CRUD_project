@@ -2,17 +2,18 @@ from utils.ascii import mostrar_titulo
 from DB import Conexion as con
 from logica import Pacientes as pa
 from logica import Doctores as doc
+from utils.validaciones import * 
 import os
 
 con = con.Conexion()
 
 def menu_principal():
     print("--------------------")
+    print("0-Salir")
     print("1-pacientes") #--Kevin
     print("2-Citas") #--Alexis
     print("3-Consultas") #--Andrea
     print("4-Doctores") #--Sebas
-    print("5-Salir")
 
 def mostrar_menu():
     while True:
@@ -34,7 +35,7 @@ def mostrar_menu():
             print("--------------------")
             os.system('cls')
             doctores()
-        elif opcion == "5":
+        elif opcion == "0":
             print("Saliendo...")
             break
         else:
@@ -186,28 +187,28 @@ def doctores():
         os.system('cls')
         
         if opcion == "1":
-            Id_Doctor = int(input("Digite el Id del doctor: "))
-            Nombres = input("Digite los nombres del doctor: ")
-            Apellidos = input("Digite los apellidos del doctor: ")
-            telefono = int(input("Digite el numero de telefono del doctor (sin guiones): "))
-            correo = input("Digite el correo del doctor: ")
-            Id_Espec = int(input("Digite el Id de la especialidad del doctor \n(Si no sabe el Id de la especialidad consulte en '6-Mostrar especialidades'): "))
+            Id_Doctor = validar_entero("Digite el Id del doctor: ")
+            Nombres = validar_texto("Digite los nombres del doctor: ")
+            Apellidos = validar_texto("Digite los apellidos del doctor: ")
+            telefono = validar_telefono("Digite el numero de telefono del doctor (sin guiones): ")
+            correo = validar_correo("Digite el correo del doctor: ")
+            Id_Espec = validar_entero("Digite el Id de la especialidad del doctor \n(Si no sabe el Id de la especialidad consulte en '6-Mostrar especialidades'): ")
             doc.agregar_doctor(con, Id_Doctor, Nombres, Apellidos, telefono, correo, Id_Espec)
             
         elif opcion == "2":
-            Id_Doctor = int(input("Digite el Id del doctor que desea eliminar: "))
+            Id_Doctor = validar_entero("Digite el Id del doctor que desea eliminar: ")
             doc.eliminar_doctor(con, Id_Doctor)
             
         elif opcion == "3":
-            Id_Doctor = int(input("Digite el Id del doctor que desea modificar: "))
-            Nombres = input("Digite los nombres del doctor: ")
-            Apellidos = input("Digite los apellidos del doctor: ")
-            telefono = int(input("Digite el numero de telefono del doctor (sin guiones): "))
-            correo = input("Digite el correo del doctor: ")
+            Id_Doctor = validar_entero("Digite el Id del doctor que desea modificar: ")
+            Nombres = validar_texto("Digite los nombres del doctor: ")
+            Apellidos = validar_texto("Digite los apellidos del doctor: ")
+            telefono = validar_telefono("Digite el numero de telefono del doctor (sin guiones): ")
+            correo = validar_correo("Digite el correo del doctor: ")
             doc.actualizar_doctor(con, Id_Doctor, Nombres, Apellidos, telefono, correo)
             
         elif opcion == "4":
-            Id_Doctor = int(input("Digite el Id del doctor que desea consultar: "))
+            Id_Doctor = validar_entero("Digite el Id del doctor que desea consultar: ")
             print("El doctor consultado es el siguiente: ")
             doc.buscar_doctor(con, Id_Doctor)
             
@@ -218,7 +219,7 @@ def doctores():
             doc.mostrar_especialidades(con)
             
         elif opcion == "7":
-            Id_Doctor = int(input("Digite el Id del doctor que desea consultar: "))
+            Id_Doctor = validar_entero("Digite el Id del doctor que desea consultar: ")
             print("La especialidad del doctor consultado es: ")
             doc.mostrar_especialidad_doctor(con, Id_Doctor)
             
