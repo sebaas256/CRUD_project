@@ -7,10 +7,11 @@ con = con.Conexion()
 
 def menu_principal():
     print("--------------------")
-    print("1-pacientes")
-    print("2-Citas")
-    print("3-Consultas")
-    print("4-Salir")
+    print("1-pacientes") #--Kevin
+    print("2-Citas") #--Alexis
+    print("3-Consultas") #--Andrea
+    print("4-Doctores") #--Sebas
+    print("5-Salir")
 
 def mostrar_menu():
     while True:
@@ -29,6 +30,10 @@ def mostrar_menu():
             print("Has seleccionado Consultas")
             consultas()
         elif opcion == "4":
+            print("--------------------")
+            print("Has seleccionado Doctores")
+            doctores()
+        elif opcion == "5":
             print("Saliendo...")
             break
         else:
