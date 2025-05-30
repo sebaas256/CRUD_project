@@ -21,7 +21,7 @@ def eliminar_consulta(Conexion, Id_Consulta):
 
 
 
-def actualizar_consulta(Conexion, Id_Consulta_Original, diagnostico, observaciones, fecha_consulta, Id_Doctor, Id_Cita):
+def actualizar_consulta(Conexion, Id_Consulta, diagnostico, observaciones, fecha_consulta, Id_Doctor, Id_Cita):
     try:
         cursor = Conexion.cursor()
         sql = """
@@ -34,6 +34,15 @@ def actualizar_consulta(Conexion, Id_Consulta_Original, diagnostico, observacion
         print("Consulta actualizada correctamente.\n")
     except Exception as ex:
         print(f"Error al actualizar la consulta: {ex}")
+
+def mostrar_consultas(Conexion):
+    try:
+        cursor = Conexion.cursor()
+        cursor.execute("SELECT * FROM CONSULTAS")
+        for fila in cursor.fetchall():
+            print(f"{fila}\n")
+    except Exception as ex:
+        print(f"Error al mostrar las consultas: {e}")
 
 
 def buscar_consulta(Conexion, Id_Consulta):
@@ -65,8 +74,7 @@ def buscar_consulta(Conexion, Id_Consulta):
             Consulta['Id_Doctor'].append(fila[4])
             Consulta['Id_Cita'].append(fila[5])
 
-       
-        print("\n--- Detalles de la Consulta ---")
+            print("\n--- Detalles de la Consulta ---")
         for i in range(len(Consulta['Id_Consulta'])): 
             print(f"ID Consulta: {Consulta['Id_Consulta'][i]}")
             print(f"Diagnóstico: {Consulta['Diagnostico'][i]}")

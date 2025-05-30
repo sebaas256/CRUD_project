@@ -37,4 +37,15 @@ def validar_texto(mensaje):
             print("--------------------")
             print("Error: El campo no puede estar vacío.")
             print("--------------------")
-            
+
+def validar_fecha(mensaje):
+    from datetime import datetime
+    while True:
+        fecha_str = input(mensaje)
+        try:
+            fecha = datetime.strptime(fecha_str, "%Y-%m-%d")
+            return fecha
+        except ValueError:
+            print("--------------------")
+            print("Error: Formato de fecha inválido. Use 'AAAA-MM-DD'.")
+            print("--------------------")           

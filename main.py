@@ -2,6 +2,7 @@ from utils.ascii import mostrar_titulo
 from DB import Conexion as con
 from logica import Pacientes as pa
 from logica import Doctores as doc
+from logica import Consultas as cons
 from utils.validaciones import * 
 import os
 
@@ -148,21 +149,43 @@ def consultas():
         print("1-Agregar consulta")
         print("2-Eliminar consulta")
         print("3-Actualizar consulta")
-        print("4-Consultar consulta")
+        print("4-Consultar consulta") #Aqui seria buscar consulta 
         print("5-Volver al menu principal")
         opcion = input("Seleccione una opción: ")
+
+        #Limpiar consola
+        os.system('cls')
+
         if opcion == "1":
-            #Codigo para agregar paciente (importar de logica)
-            print("")
+            Id_Consulta = validar_entero("Digite el Id de la consulta: ")
+            Diagnostico = validar_texto("Digite el diagnostico de la consulta: ")
+            Observaciones = validar_texto("Digite las observaciones de la consulta: ")
+            Fecha_Consulta = validar_fecha("Digite la fecha de la consulta (AAAA-MM-DD): ")
+            ID_Doctor = validar_entero("Digite el Id del doctor que atendió la consulta: ")
+            ID_Cita = validar_entero("Digite el Id de la cita asociada a la consulta: ")
+            cons.agregar_consulta(con, Id_Consulta, Diagnostico, Observaciones, Fecha_Consulta, ID_Doctor, ID_Cita)
+            print("Consulta agregada correctamente.")
+
         elif opcion == "2":
-            #Codigo para eliminar paciente (importar de logica)
-            print("")
+            Id_Consulta = validar_entero("Digite el Id de la consulta que desea eliminar: ")
+            cons.eliminar_consulta(con, Id_Consulta)
+            print("La consulta ha sido eliminada correctamente.")
+
         elif opcion == "3":
-            #Codigo para actualizar paciente (importar de logica)
-            print("")
+            Id_Consulta = validar_entero("Digite el Id de la consulta que desea actualizar: ")
+            Diagnostico = validar_texto("Digite el nuevo diagnostico de la consulta: ")
+            Observaciones = validar_texto("Digite las nuevas observaciones de la consulta: ")
+            Fecha_Consulta = validar_fecha("Digite la nueva fecha de la consulta (AAAA-MM-DD): ")
+            ID_Doctor = validar_entero("Digite el nuevo Id del doctor que atendió la consulta: ")
+            ID_Cita = validar_entero("Digite el nuevo Id de la cita asociada a la consulta: ")
+            cons.actualizar_consulta(con, Id_Consulta, Diagnostico, Observaciones, Fecha_Consulta, ID_Doctor, ID_Cita)
+            print("Consulta actualizada correctamente.")
+
         elif opcion == "4":
-            #Codigo para consultar paciente (importar de logica)
-            print("")
+            Id_Consulta = validar_entero("Digite el Id de la consulta que desea consultar: ")
+            cons.buscar_consulta(con, Id_Consulta)
+            print("La consulta ha sido consultada correctamente.")
+
         elif opcion == "5":
             break
         else:
