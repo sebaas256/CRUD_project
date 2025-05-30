@@ -50,7 +50,10 @@ def pacientes():
         print("2-Eliminar Paciente")
         print("3-Actualizar Paciente")
         print("4-Consultar Paciente")
-        print("5-Volver al menu principal")
+        print("5-Mostrar todos los pacientes")
+        print("6-Mostrar citas de un paciente")
+        print("7-Volver al menu principal")
+        
         opcion = input("Seleccione una opción: ")
         
         #Limpiar consola
@@ -107,6 +110,15 @@ def pacientes():
             pa.BuscarPaciente(con, Dui)            
             
         elif opcion == "5":
+            
+            pa.MostrarPacientes(con)
+        
+        elif opcion == "6":
+            
+            Dui = input("Digite el DUI del paciente que quiere buscar: ")
+            pa.ConsultarCitas(con,Dui)
+        
+        elif opcion == "7":
             break
         else:
             print("--------------------")
