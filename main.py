@@ -181,8 +181,7 @@ def consultas():
         elif opcion == "2":
             Id_Consulta = validar_entero("Digite el Id de la consulta que desea eliminar: ")
             cons.eliminar_consulta(con, Id_Consulta)
-            print("La consulta ha sido eliminada correctamente.")
-
+            
         elif opcion == "3":
             Id_Consulta = validar_entero("Digite el Id de la consulta que desea actualizar: ")
             Diagnostico = validar_texto("Digite el nuevo diagnostico de la consulta: ")
@@ -190,7 +189,7 @@ def consultas():
             Fecha_Consulta = validar_fecha("Digite la nueva fecha de la consulta (AAAA-MM-DD): ")
             ID_Doctor = validar_entero("Digite el nuevo Id del doctor que atendió la consulta: ")
             ID_Cita = validar_entero("Digite el nuevo Id de la cita asociada a la consulta: ")
-            cons.actualizar_consulta(con, Id_Consulta, Diagnostico, Observaciones, Fecha_Consulta, ID_Doctor, ID_Cita)
+            cons.actualizar_consulta(con, Diagnostico, Observaciones, Fecha_Consulta, ID_Doctor, ID_Cita, Id_Consulta)
             print("Consulta actualizada correctamente.")
 
         elif opcion == "4":
