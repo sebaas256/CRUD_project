@@ -1,3 +1,6 @@
+create database CONSULTORIO_DENTAL
+use CONSULTORIO_DENTAL
+
 CREATE TABLE DOCTORES 
 (
 	Id_Doctor int not null,
