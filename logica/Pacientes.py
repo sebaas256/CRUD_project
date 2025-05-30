@@ -107,6 +107,9 @@ def ConsultarCitas(conexion, DUI):
     print(f"{'DUI':<12} {'Nombres':<30} {'Apellidos':<30} {'Consultorio':<12} {'Descripción':<30} {'Fecha':<20} {'Estado':<10}")
     print("-" * 144)
     for fila in filas:
+        estado = ""
+        if fila[6] == 1: estado = 'Pendiente'  
+        else: estado = 'Realizada' 
         fecha = fila[5].strftime("%Y-%m-%d %H:%M:%S") if fila[5] else ""
-        print(f"{fila[0]:<12} {fila[1]:<30} {fila[2]:<30} {fila[3]:<12} {fila[4]:<30} {fecha:<20} {fila[6]:<10}")
+        print(f"{fila[0]:<12} {fila[1]:<30} {fila[2]:<30} {fila[3]:<12} {fila[4]:<30} {fecha:<20} {estado:<10}")
    
