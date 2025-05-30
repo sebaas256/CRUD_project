@@ -37,4 +37,3 @@ def validar_texto(mensaje):
             print("--------------------")
             print("Error: El campo no puede estar vacío.")
             print("--------------------")
-            
