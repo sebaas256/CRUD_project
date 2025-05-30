@@ -21,13 +21,13 @@ def eliminar_consulta(Conexion, Id_Consulta):
 
 
 
-def actualizar_consulta(Conexion, Id_Consulta, diagnostico, observaciones, fecha_consulta, Id_Doctor, Id_Cita):
+def actualizar_consulta(Conexion, diagnostico, observaciones, fecha_consulta, Id_Doctor, Id_Cita, Id_Consulta_Original):
     try:
         cursor = Conexion.cursor()
         sql = """
         UPDATE CONSULTAS
         SET diagnostico = ?, observaciones = ?, fecha_consulta = ?, Id_Doctor = ?, Id_Cita = ?
-        WHERE Id_Consulta = ?
+        WHERE Id_Consulta = ?;
         """
         cursor.execute(sql, (diagnostico, observaciones, fecha_consulta, Id_Doctor, Id_Cita, Id_Consulta_Original))
         Conexion.commit()
@@ -38,12 +38,17 @@ def actualizar_consulta(Conexion, Id_Consulta, diagnostico, observaciones, fecha
 def mostrar_consultas(Conexion):
     try:
         cursor = Conexion.cursor()
-        cursor.execute("SELECT * FROM CONSULTAS")
+        sql = "SELECT * FROM CONSULTAS"
+        cursor.execute(sql)
         for fila in cursor.fetchall():
-            print(f"{fila}\n")
+            print(f"ID Consulta: {fila[0]}")
+            print(f"Diagnóstico: {fila[1]}")
+            print(f"Observaciones: {fila[2]}")
+            print(f"Fecha de Consulta: {fila[3]}")
+            print(f"ID Doctor: {fila[4]}")
+            print(f"ID Cita: {fila[5]}\n")
     except Exception as ex:
-        print(f"Error al mostrar las consultas: {e}")
-
+        print(f"Error al mostrar las consultas: {ex}")
 
 def buscar_consulta(Conexion, Id_Consulta):
 
