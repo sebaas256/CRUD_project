@@ -1,6 +1,7 @@
 create database CONSULTORIO_DENTAL
 use CONSULTORIO_DENTAL
 
+
 CREATE TABLE DOCTORES 
 (
 	Id_Doctor int not null,
@@ -237,3 +238,114 @@ EXEC AgregarConsultas 20, 'Bruxismo diagnosticado', 'Uso de guarda nocturna.', '
 EXEC AgregarReceta 1, 'Usar enjuague bucal con fluor cada noche.', 1;
 EXEC AgregarReceta 2, 'Agendar limpieza profunda en 3 meses.', 2;
 EXEC AgregarReceta 3, 'Colocacion de ligas correctoras en la siguiente cita.', 3;
+
+
+
+
+--Vistas--
+--1 Mostrar los detalles de la cita de un paciente con su doctor--
+create view detalle_cita as 
+select 
+pac.Dui_Paciente, 
+concat(pac.Nombres, ' ',pac.Apellidos) as paciente, 
+cit.fecha_cita, cit.consultorio, cit.estado_cita,
+concat(docs.Nombres, ' ',docs.Apellidos) as doctor
+from PACIENTES pac
+join CITAS cit on (pac.Dui_Paciente = cit.Dui_Paciente)
+join CONSULTAS consu on (cit.Id_Cita = consu.Id_Cita)
+join DOCTORES docs on (consu.Id_Doctor = docs.Id_Doctor)
+
+
+--2 Mostrar el total de consultas hechas o por hacer de un doctor--
+create view promedio_consultas_doctor as 
+select
+doc.Id_Doctor, 
+concat(doc.Nombres, ' ',doc.Apellidos) as doctor,
+count(consu.Id_Consulta) as total_consultas
+from DOCTORES doc
+left join CONSULTAS consu on (consu.Id_Doctor = doc.Id_Doctor)
+group by doc.Id_Doctor, doc.Nombres, doc.Apellidos
+
+
+--3 Mostrar el total de doctores de cada especialidad--
+create view doctores_por_especialidad as 
+select 
+esp.Nombre_esp as especialidad,
+count(d.Id_Doctor) as cantidad_doctores
+from DOC_ESPC esp
+join DOCTORES d on (d.Id_Espc = esp.Id_Espc)
+group by esp.Nombre_esp
+
+
+--4 Mostrar la informacion de las citas que estan pendientes por realizarse--
+create view citas_pendientes as 
+select 
+c.fecha_cita, 
+concat(p.Nombres, ' ',p.Apellidos) as paciente, 
+concat(d.Nombres, ' ',d.Apellidos) as doctor, 
+c.estado_cita
+from CITAS c
+join PACIENTES p on (p.Dui_Paciente = c.Dui_Paciente)
+join CONSULTAS cons on (c.Id_Cita = cons.Id_Cita)
+join DOCTORES d on (cons.Id_Doctor = d.Id_Doctor)
+where c.estado_cita = 0
+
+
+--5 Mostrar pacientes que tengan dos o mas consultas--
+create view pacientes_varias_consultas as
+select 
+p.Dui_Paciente, 
+concat(p.Nombres, ' ',p.Apellidos )as paciente
+from PACIENTES p 
+where (
+select count(*)
+from CITAS c 
+join CONSULTAS cons on (c.Id_Cita = cons.Id_Cita)
+where c.Dui_Paciente = p.Dui_Paciente 
+) >= 2
+
+
+--6 Mostrar todos los doctores que no tengan ninguna consulta registrada--
+create view doctores_sin_consultas as
+select 
+d.Id_Doctor,
+CONCAT(d.Nombres, ' ',d.Apellidos) as doctor
+from DOCTORES d
+left join CONSULTAS cons on (cons.Id_Doctor = d.Id_Doctor)
+where cons.Id_Consulta = null
+
+
+--7 Mostra el historial completo de consultas con detalles del paciente doctor y receta--
+create view consultas_completas as 
+select 
+cons.Id_Consulta,
+p.Dui_Paciente,
+concat(p.Nombres, ' ',p.Apellidos) AS paciente,
+concat(d.Nombres, ' ', d.Apellidos) AS doctor,
+esp.Nombre_esp AS especialidad,
+cons.fecha_consulta,
+cons.diagnostico,
+cons.observaciones,
+r.deta_receta AS receta
+from CONSULTAS cons
+join CITAS c on (cons.Id_Cita = c.Id_Cita)
+join PACIENTES p on (c.Dui_Paciente = p.Dui_Paciente)
+join DOCTORES d on (cons.Id_Doctor = d.Id_Doctor)
+join DOC_ESPC esp on (esp.Id_Espc = d.Id_Espc)
+left join RECETA r on (cons.Id_Consulta = r.Id_Consulta)
+
+
+--8 mostrar los pacientes que tuvieron una consulta el primer dia de cualquier mes--
+create view consultas_primer_dia_mes as
+select 
+p.Dui_Paciente, 
+CONCAT(p.Nombres, ' ',p.Apellidos) as paciente,
+cons.fecha_consulta,
+cons.diagnostico,
+CONCAT(d.Nombres, ' ',d.Apellidos) as doctor
+from PACIENTES p 
+inner join CITAS c on (c.Dui_Paciente = p.Dui_Paciente)
+inner join CONSULTAS cons on (c.Id_Cita = cons.Id_Cita)
+inner join DOCTORES d on (d.Id_Doctor = cons.Id_Doctor)
+where DAY(cons.fecha_consulta) = 1
+
