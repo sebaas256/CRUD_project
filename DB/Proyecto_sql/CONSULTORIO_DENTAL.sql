@@ -406,7 +406,6 @@ where convert(date, C.fecha_cita) between '2025-06-02' and '2025-06-03'
 order by P.Nombres, P.Apellidos asc;
 
 -- 10. Obtener los nombres de los pacientes que tienen al menos una cita confirmada.
--- Cláusulas: SELECT, FROM, WHERE, IN (con una subconsulta para ID_DUI de citas confirmadas).
 
 select Nombres, Apellidos
 from PACIENTES where Dui_Paciente in (select Dui_Paciente from CITAS where estado_cita = 1)
