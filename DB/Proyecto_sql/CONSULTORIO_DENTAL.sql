@@ -361,10 +361,10 @@ from PACIENTES P inner join CITAS C on (P.Dui_Paciente = C.Dui_Paciente)
 group by P.Dui_Paciente, P.Nombres;
 
 --  3. Encontrar los IDs de doctor que han atendido más de 3 consultas.
-
-select D.Nombres, D.Apellidos, COUNT(C.Id_Consulta) as total_consultas
+select * from DOCTORES
+select D.Id_Doctor, D.Nombres, D.Apellidos, COUNT(C.Id_Consulta) as total_consultas
 from DOCTORES D inner join CONSULTAS C on (D.Id_Doctor = C.Id_Doctor)
-group by D.Nombres, D.Apellidos
+group by D.Id_Doctor, D.Nombres, D.Apellidos
 having COUNT(C.Id_Consulta) > 3
 
 -- 4. Mostrar todos los pacientes que no tienen ninguna cita programada.
@@ -373,11 +373,11 @@ having COUNT(C.Id_Consulta) > 3
 select DUI_Paciente, Nombres, Apellidos
 from PACIENTES where Dui_Paciente not in (select Dui_Paciente from CITAS);
 
--- 5. Contar el número promedio de consultas que tiene cada doctor.
+-- 5. Contar el número total de consultas que tiene cada doctor.
 
-select D.Id_Doctor, avg(C.Id_COnsulta) as promedio_consultas
-from DOCTORES D inner join CONSULTAS C on (D.Id_Doctor = C.Id_Doctor)
-group by D.Id_Doctor;
+select D.ID_Doctor, count(C.ID_Consulta) AS NumeroTotalDeConsultas
+from DOCTORES as D inner join CONSULTAS AS C ON D.ID_Doctor = C.Id_Doctor
+group by D.ID_Doctor;
 
 -- 6. Obtener las citas programadas en un consultorio específico.
 
@@ -388,9 +388,9 @@ from CITAS where consultorio = 'C302'
 -- fecha de la cita y luego por el apellido del paciente.
 
 
-select C.Id_Cita, P.Nombres
+select C.Id_Cita, P.Nombres, P.Apellidos, C.fecha_cita
 from CITAS C inner join PACIENTES P on (C.Dui_Paciente = P.Dui_Paciente)
-order by fecha_cita, Apellidos;
+order by fecha_cita, Apellidos asc;
 
 -- 8. Identificar qué doctores no han registrado ninguna consulta.
 
