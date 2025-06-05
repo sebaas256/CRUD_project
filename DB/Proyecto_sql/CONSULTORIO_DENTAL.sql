@@ -1,6 +1,7 @@
 create database CONSULTORIO_DENTAL
 use CONSULTORIO_DENTAL
 
+
 CREATE TABLE DOCTORES 
 (
 	Id_Doctor int not null,
@@ -237,3 +238,175 @@ EXEC AgregarConsultas 20, 'Bruxismo diagnosticado', 'Uso de guarda nocturna.', '
 EXEC AgregarReceta 1, 'Usar enjuague bucal con fluor cada noche.', 1;
 EXEC AgregarReceta 2, 'Agendar limpieza profunda en 3 meses.', 2;
 EXEC AgregarReceta 3, 'Colocacion de ligas correctoras en la siguiente cita.', 3;
+
+
+
+
+--Vistas--
+--1 Mostrar los detalles de la cita de un paciente con su doctor--
+create view detalle_cita as 
+select 
+pac.Dui_Paciente, 
+concat(pac.Nombres, ' ',pac.Apellidos) as paciente, 
+cit.fecha_cita, cit.consultorio, cit.estado_cita,
+concat(docs.Nombres, ' ',docs.Apellidos) as doctor
+from PACIENTES pac
+join CITAS cit on (pac.Dui_Paciente = cit.Dui_Paciente)
+join CONSULTAS consu on (cit.Id_Cita = consu.Id_Cita)
+join DOCTORES docs on (consu.Id_Doctor = docs.Id_Doctor)
+
+
+--2 Mostrar el total de consultas hechas o por hacer de un doctor--
+create view promedio_consultas_doctor as 
+select
+doc.Id_Doctor, 
+concat(doc.Nombres, ' ',doc.Apellidos) as doctor,
+count(consu.Id_Consulta) as total_consultas
+from DOCTORES doc
+left join CONSULTAS consu on (consu.Id_Doctor = doc.Id_Doctor)
+group by doc.Id_Doctor, doc.Nombres, doc.Apellidos
+
+
+--3 Mostrar el total de doctores de cada especialidad--
+create view doctores_por_especialidad as 
+select 
+esp.Nombre_esp as especialidad,
+count(d.Id_Doctor) as cantidad_doctores
+from DOC_ESPC esp
+join DOCTORES d on (d.Id_Espc = esp.Id_Espc)
+group by esp.Nombre_esp
+
+
+--4 Mostrar la informacion de las citas que estan pendientes por realizarse--
+create view citas_pendientes as 
+select 
+c.fecha_cita, 
+concat(p.Nombres, ' ',p.Apellidos) as paciente, 
+concat(d.Nombres, ' ',d.Apellidos) as doctor, 
+c.estado_cita
+from CITAS c
+join PACIENTES p on (p.Dui_Paciente = c.Dui_Paciente)
+join CONSULTAS cons on (c.Id_Cita = cons.Id_Cita)
+join DOCTORES d on (cons.Id_Doctor = d.Id_Doctor)
+where c.estado_cita = 0
+
+
+--5 Mostrar pacientes que tengan dos o mas consultas--
+create view pacientes_varias_consultas as
+select 
+p.Dui_Paciente, 
+concat(p.Nombres, ' ',p.Apellidos )as paciente
+from PACIENTES p 
+where (
+select count(*)
+from CITAS c 
+join CONSULTAS cons on (c.Id_Cita = cons.Id_Cita)
+where c.Dui_Paciente = p.Dui_Paciente 
+) >= 2
+
+
+--6 Mostrar todos los doctores que no tengan ninguna consulta registrada--
+create view doctores_sin_consultas as
+select 
+d.Id_Doctor,
+CONCAT(d.Nombres, ' ',d.Apellidos) as doctor
+from DOCTORES d
+left join CONSULTAS cons on (cons.Id_Doctor = d.Id_Doctor)
+where cons.Id_Consulta = null
+
+
+--7 Mostra el historial completo de consultas con detalles del paciente doctor y receta--
+create view consultas_completas as 
+select 
+cons.Id_Consulta,
+p.Dui_Paciente,
+concat(p.Nombres, ' ',p.Apellidos) AS paciente,
+concat(d.Nombres, ' ', d.Apellidos) AS doctor,
+esp.Nombre_esp AS especialidad,
+cons.fecha_consulta,
+cons.diagnostico,
+cons.observaciones,
+r.deta_receta AS receta
+from CONSULTAS cons
+join CITAS c on (cons.Id_Cita = c.Id_Cita)
+join PACIENTES p on (c.Dui_Paciente = p.Dui_Paciente)
+join DOCTORES d on (cons.Id_Doctor = d.Id_Doctor)
+join DOC_ESPC esp on (esp.Id_Espc = d.Id_Espc)
+left join RECETA r on (cons.Id_Consulta = r.Id_Consulta)
+
+
+--8 mostrar los pacientes que tuvieron una consulta el primer dia de cualquier mes--
+create view consultas_primer_dia_mes as
+select 
+p.Dui_Paciente, 
+CONCAT(p.Nombres, ' ',p.Apellidos) as paciente,
+cons.fecha_consulta,
+cons.diagnostico,
+CONCAT(d.Nombres, ' ',d.Apellidos) as doctor
+from PACIENTES p 
+inner join CITAS c on (c.Dui_Paciente = p.Dui_Paciente)
+inner join CONSULTAS cons on (c.Id_Cita = cons.Id_Cita)
+inner join DOCTORES d on (d.Id_Doctor = cons.Id_Doctor)
+where DAY(cons.fecha_consulta) = 1
+
+-- CONSULTAS
+
+-- 1. Consultas ordenadas por fecha de consulta, de la más reciente a las más antigua
+
+select * from Consultas order by fecha_consulta desc;
+
+--  2. Contar cuántas citas tiene cada paciente.
+select P.Dui_Paciente, P.Nombres, COUNT(C.Id_Cita) as Citas_Paciente
+from PACIENTES P inner join CITAS C on (P.Dui_Paciente = C.Dui_Paciente)
+group by P.Dui_Paciente, P.Nombres;
+
+--  3. Encontrar los IDs de doctor que han atendido más de 3 consultas.
+
+select D.Nombres, D.Apellidos, COUNT(C.Id_Consulta) as total_consultas
+from DOCTORES D inner join CONSULTAS C on (D.Id_Doctor = C.Id_Doctor)
+group by D.Nombres, D.Apellidos
+having COUNT(C.Id_Consulta) > 3
+
+-- 4. Mostrar todos los pacientes que no tienen ninguna cita programada.
+
+
+select DUI_Paciente, Nombres, Apellidos
+from PACIENTES where Dui_Paciente not in (select Dui_Paciente from CITAS);
+
+-- 5. Contar el número promedio de consultas que tiene cada doctor.
+
+select D.Id_Doctor, avg(C.Id_COnsulta) as promedio_consultas
+from DOCTORES D inner join CONSULTAS C on (D.Id_Doctor = C.Id_Doctor)
+group by D.Id_Doctor;
+
+-- 6. Obtener las citas programadas en un consultorio específico.
+
+select Id_Cita, consultorio
+from CITAS where consultorio = 'C302'
+
+-- 7.  Listar las citas junto con el nombre del paciente, ordenadas por la
+-- fecha de la cita y luego por el apellido del paciente.
+
+
+select C.Id_Cita, P.Nombres
+from CITAS C inner join PACIENTES P on (C.Dui_Paciente = P.Dui_Paciente)
+order by fecha_cita, Apellidos;
+
+-- 8. Identificar qué doctores no han registrado ninguna consulta.
+
+select D.Id_Doctor, D.Nombres, D.Apellidos, C.Id_Consulta
+from DOCTORES D left join CONSULTAS C on (D.Id_Doctor = C.Id_Doctor) where C.Id_Consulta is null
+
+-- 9. Mostrar los detalles de las citas y los pacientes asociados, para citas
+-- que ocurrieron en un rango de fechas específico, ordenado por el nombre del paciente.
+
+select C.Id_Cita, P.Dui_Paciente, P.Nombres, P.Apellidos, C.fecha_cita, C.consultorio, C.descripcion, C.estado_cita
+from CITAS C inner join PACIENTES P on (C.Dui_Paciente = P.Dui_Paciente)
+where convert(date, C.fecha_cita) between '2025-06-02' and '2025-06-03'
+order by P.Nombres, P.Apellidos asc;
+
+-- 10. Obtener los nombres de los pacientes que tienen al menos una cita confirmada.
+-- Cláusulas: SELECT, FROM, WHERE, IN (con una subconsulta para ID_DUI de citas confirmadas).
+
+select Nombres, Apellidos
+from PACIENTES where Dui_Paciente in (select Dui_Paciente from CITAS where estado_cita = 1)
