@@ -115,3 +115,11 @@ ADD CONSTRAINT fk_detatram_consult
 FOREIGN KEY (Id_Consulta)
 REFERENCES CONSULTAS (Id_Consulta)
 on update cascade on delete no action
+
+UPDATE CITAS SET estado_cita = 0 
+WHERE estado_cita = 1
+ 
+UPDATE CITAS SET estado_cita = 1
+WHERE Id_Cita IN (1,2,3)
+
+select * from CITAS
