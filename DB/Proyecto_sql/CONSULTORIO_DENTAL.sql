@@ -241,6 +241,68 @@ EXEC AgregarReceta 3, 'Colocacion de ligas correctoras en la siguiente cita.', 3
 
 
 
+-- CONSULTAS
+
+-- 1. Consultas ordenadas por fecha de consulta, de la más reciente a las más antigua
+
+select * from Consultas order by fecha_consulta desc;
+
+--  2. Contar cuántas citas tiene cada paciente.
+select P.Dui_Paciente, P.Nombres, COUNT(C.Id_Cita) as Citas_Paciente
+from PACIENTES P inner join CITAS C on (P.Dui_Paciente = C.Dui_Paciente)
+group by P.Dui_Paciente, P.Nombres;
+
+--  3. Encontrar los IDs de doctor que han atendido más de 3 consultas.
+select * from DOCTORES
+select D.Id_Doctor, D.Nombres, D.Apellidos, COUNT(C.Id_Consulta) as total_consultas
+from DOCTORES D inner join CONSULTAS C on (D.Id_Doctor = C.Id_Doctor)
+group by D.Id_Doctor, D.Nombres, D.Apellidos
+having COUNT(C.Id_Consulta) > 3
+
+-- 4. Mostrar todos los pacientes que no tienen ninguna cita programada.
+
+
+select DUI_Paciente, Nombres, Apellidos
+from PACIENTES where Dui_Paciente not in (select Dui_Paciente from CITAS);
+
+-- 5. Contar el número total de consultas que tiene cada doctor.
+
+select D.ID_Doctor, count(C.ID_Consulta) AS NumeroTotalDeConsultas
+from DOCTORES as D inner join CONSULTAS AS C ON D.ID_Doctor = C.Id_Doctor
+group by D.ID_Doctor;
+
+-- 6. Obtener las citas programadas en un consultorio específico.
+
+select Id_Cita, consultorio
+from CITAS where consultorio = 'C302'
+
+-- 7.  Listar las citas junto con el nombre del paciente, ordenadas por la
+-- fecha de la cita y luego por el apellido del paciente.
+
+
+select C.Id_Cita, P.Nombres, P.Apellidos, C.fecha_cita
+from CITAS C inner join PACIENTES P on (C.Dui_Paciente = P.Dui_Paciente)
+order by fecha_cita, Apellidos asc;
+
+-- 8. Identificar qué doctores no han registrado ninguna consulta.
+
+select D.Id_Doctor, D.Nombres, D.Apellidos, C.Id_Consulta
+from DOCTORES D left join CONSULTAS C on (D.Id_Doctor = C.Id_Doctor) where C.Id_Consulta is null
+
+-- 9. Mostrar los detalles de las citas y los pacientes asociados, para citas
+-- que ocurrieron en un rango de fechas específico, ordenado por el nombre del paciente.
+
+select C.Id_Cita, P.Dui_Paciente, P.Nombres, P.Apellidos, C.fecha_cita, C.consultorio, C.descripcion, C.estado_cita
+from CITAS C inner join PACIENTES P on (C.Dui_Paciente = P.Dui_Paciente)
+where convert(date, C.fecha_cita) between '2025-06-02' and '2025-06-03'
+order by P.Nombres, P.Apellidos asc;
+
+-- 10. Obtener los nombres de los pacientes que tienen al menos una cita confirmada.
+
+select Nombres, Apellidos
+from PACIENTES where Dui_Paciente in (select Dui_Paciente from CITAS where estado_cita = 1)
+
+
 
 --Vistas--
 --1 Mostrar los detalles de la cita de un paciente con su doctor--
@@ -349,63 +411,3 @@ inner join CONSULTAS cons on (c.Id_Cita = cons.Id_Cita)
 inner join DOCTORES d on (d.Id_Doctor = cons.Id_Doctor)
 where DAY(cons.fecha_consulta) = 1
 
--- CONSULTAS
-
--- 1. Consultas ordenadas por fecha de consulta, de la más reciente a las más antigua
-
-select * from Consultas order by fecha_consulta desc;
-
---  2. Contar cuántas citas tiene cada paciente.
-select P.Dui_Paciente, P.Nombres, COUNT(C.Id_Cita) as Citas_Paciente
-from PACIENTES P inner join CITAS C on (P.Dui_Paciente = C.Dui_Paciente)
-group by P.Dui_Paciente, P.Nombres;
-
---  3. Encontrar los IDs de doctor que han atendido más de 3 consultas.
-select * from DOCTORES
-select D.Id_Doctor, D.Nombres, D.Apellidos, COUNT(C.Id_Consulta) as total_consultas
-from DOCTORES D inner join CONSULTAS C on (D.Id_Doctor = C.Id_Doctor)
-group by D.Id_Doctor, D.Nombres, D.Apellidos
-having COUNT(C.Id_Consulta) > 3
-
--- 4. Mostrar todos los pacientes que no tienen ninguna cita programada.
-
-
-select DUI_Paciente, Nombres, Apellidos
-from PACIENTES where Dui_Paciente not in (select Dui_Paciente from CITAS);
-
--- 5. Contar el número total de consultas que tiene cada doctor.
-
-select D.ID_Doctor, count(C.ID_Consulta) AS NumeroTotalDeConsultas
-from DOCTORES as D inner join CONSULTAS AS C ON D.ID_Doctor = C.Id_Doctor
-group by D.ID_Doctor;
-
--- 6. Obtener las citas programadas en un consultorio específico.
-
-select Id_Cita, consultorio
-from CITAS where consultorio = 'C302'
-
--- 7.  Listar las citas junto con el nombre del paciente, ordenadas por la
--- fecha de la cita y luego por el apellido del paciente.
-
-
-select C.Id_Cita, P.Nombres, P.Apellidos, C.fecha_cita
-from CITAS C inner join PACIENTES P on (C.Dui_Paciente = P.Dui_Paciente)
-order by fecha_cita, Apellidos asc;
-
--- 8. Identificar qué doctores no han registrado ninguna consulta.
-
-select D.Id_Doctor, D.Nombres, D.Apellidos, C.Id_Consulta
-from DOCTORES D left join CONSULTAS C on (D.Id_Doctor = C.Id_Doctor) where C.Id_Consulta is null
-
--- 9. Mostrar los detalles de las citas y los pacientes asociados, para citas
--- que ocurrieron en un rango de fechas específico, ordenado por el nombre del paciente.
-
-select C.Id_Cita, P.Dui_Paciente, P.Nombres, P.Apellidos, C.fecha_cita, C.consultorio, C.descripcion, C.estado_cita
-from CITAS C inner join PACIENTES P on (C.Dui_Paciente = P.Dui_Paciente)
-where convert(date, C.fecha_cita) between '2025-06-02' and '2025-06-03'
-order by P.Nombres, P.Apellidos asc;
-
--- 10. Obtener los nombres de los pacientes que tienen al menos una cita confirmada.
-
-select Nombres, Apellidos
-from PACIENTES where Dui_Paciente in (select Dui_Paciente from CITAS where estado_cita = 1)
