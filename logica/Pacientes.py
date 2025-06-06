@@ -102,13 +102,13 @@ def ConsultarCitas(conexion, DUI):
     sql = 'SELECT P.Dui_Paciente, P.Nombres, P.Apellidos, C.consultorio, C.descripcion, C.fecha_cita, C.estado_cita FROM PACIENTES P INNER JOIN CITAS C ON C.Dui_Paciente = P.Dui_Paciente WHERE P.Dui_Paciente = ?'
             
     cursor.execute(sql, DUI)
-    filas = cursor.fetchall()
+    filas = cursor.fetchall() 
     
     print(f"{'DUI':<12} {'Nombres':<30} {'Apellidos':<30} {'Consultorio':<12} {'Descripción':<30} {'Fecha':<20} {'Estado':<10}")
     print("-" * 144)
     for fila in filas:
         estado = ""
-        if fila[6] == 1: estado = 'Pendiente'  
+        if fila[6] == 0: estado = 'Pendiente'  
         else: estado = 'Realizada' 
         fecha = fila[5].strftime("%Y-%m-%d %H:%M:%S") if fila[5] else ""
         print(f"{fila[0]:<12} {fila[1]:<30} {fila[2]:<30} {fila[3]:<12} {fila[4]:<30} {fecha:<20} {estado:<10}")
