@@ -157,18 +157,21 @@ def citas():
 
 def consultas():
     while True:
-        print("Has seleccionado Consultas")  
+        print("Has seleccionado Consultas") 
+        print("0-Volver al menu principal")
         print("1-Agregar consulta")
         print("2-Eliminar consulta")
         print("3-Actualizar consulta")
-        print("4-Consultar consulta") #Aqui seria buscar consulta 
-        print("5-Volver al menu principal")
+        print("4-Buscar consulta")
+        print("5-Mostrar todas las consultas")
         opcion = input("Seleccione una opción: ")
 
         #Limpiar consola
         os.system('cls')
+        if opcion == "0":
+            break
 
-        if opcion == "1":
+        elif opcion == "1":
             Id_Consulta = validar_entero("Digite el Id de la consulta: ")
             Diagnostico = validar_texto("Digite el diagnostico de la consulta: ")
             Observaciones = validar_texto("Digite las observaciones de la consulta: ")
@@ -176,7 +179,6 @@ def consultas():
             ID_Doctor = validar_entero("Digite el Id del doctor que atendió la consulta: ")
             ID_Cita = validar_entero("Digite el Id de la cita asociada a la consulta: ")
             cons.agregar_consulta(con, Id_Consulta, Diagnostico, Observaciones, Fecha_Consulta, ID_Doctor, ID_Cita)
-            print("Consulta agregada correctamente.")
 
         elif opcion == "2":
             Id_Consulta = validar_entero("Digite el Id de la consulta que desea eliminar: ")
@@ -190,15 +192,14 @@ def consultas():
             ID_Doctor = validar_entero("Digite el nuevo Id del doctor que atendió la consulta: ")
             ID_Cita = validar_entero("Digite el nuevo Id de la cita asociada a la consulta: ")
             cons.actualizar_consulta(con, Diagnostico, Observaciones, Fecha_Consulta, ID_Doctor, ID_Cita, Id_Consulta)
-            print("Consulta actualizada correctamente.")
 
         elif opcion == "4":
-            Id_Consulta = validar_entero("Digite el Id de la consulta que desea consultar: ")
+            Id_Consulta = validar_entero("Digite el Id de la consulta que desea buscar: ")
             cons.buscar_consulta(con, Id_Consulta)
-            print("La consulta ha sido consultada correctamente.")
-
+        
         elif opcion == "5":
-            break
+            cons.mostrar_consultas(con)
+
         else:
             print("--------------------")
             print("Opción no válida. Intente de nuevo.")

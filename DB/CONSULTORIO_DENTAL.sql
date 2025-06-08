@@ -122,4 +122,3 @@ WHERE estado_cita = 1
 UPDATE CITAS SET estado_cita = 1
 WHERE Id_Cita IN (1,2,3)
 
-select * from CITAS
