@@ -1,8 +1,10 @@
 from utils.ascii import mostrar_titulo
 from DB import Conexion as con
 from logica import Pacientes as pa
+from logica import Citas as cit
 from logica import Doctores as doc
 from logica import Consultas as cons
+
 from utils.validaciones import * 
 import os
 
@@ -125,6 +127,7 @@ def pacientes():
             print("Opción no válida. Intente de nuevo.")
             print("--------------------")
             
+#CITAS------
 
 def citas():
     while True:
@@ -133,27 +136,57 @@ def citas():
         print("2-Eliminar cita")
         print("3-Actualizar cita")
         print("4-Consultar cita")
-        print("5-Volver al menu principal")
+        print("0-Volver al menu principal")
         opcion = input("Seleccione una opción: ")
-        if opcion == "1":
-            #Codigo para agregar paciente (importar de logica)
-            print("")
-        elif opcion == "2":
-            #Codigo para eliminar paciente (importar de logica)
-            print("")
-        elif opcion == "3":
-            #Codigo para actualizar paciente (importar de logica)
-            print("")
-        elif opcion == "4":
-            #Codigo para consultar paciente (importar de logica)
-            print("")
-        elif opcion == "5":
+
+        if opcion == "0":
             break
+
+#Codigo para agregar paciente (importar de logica)
+        if opcion == "1":
+            print("\nS AGREGAR CITA")
+            id_cita = validar_entero("ID de la cita: ")
+            fecha_cita = validar_Fecha_Hora("Fecha (AAAA-MM-DD HH:MM): ")
+            consultorio = input("Consultorio: ")
+            descripcion = input("Descripción: ")
+            estado_cita = validar_estado()            
+            dui_paciente = input("DUI del paciente: ")
+            if cit.agregar_cita(con, id_cita, fecha_cita, consultorio, descripcion, estado_cita, dui_paciente):
+                print("Cita agregada!")
+#Codigo para eliminar paciente (importar de logica)
+        elif opcion == "2":
+            id_cita = validar_entero("ID de la cita a eliminar: ")
+            if cit.eliminar_cita(con, id_cita):
+                print("Cita eliminada!")
+#Codigo para actualizar paciente (importar de logica)
+        elif opcion == "3":
+            id_cita = validar_entero("ID de la cita: ")
+            nueva_fecha = validar_Fecha_Hora("Nueva fecha (AAAA-MM-DD-HH-MM): ")
+            nuevo_estado = validar_estado()
+            if cit.actualizar_cita(con, id_cita, nueva_fecha, nuevo_estado):
+                    print("Cita actualizada!")
+            else:
+                print("Error al Actualizar la cita.")
+#Codigo para consultar paciente (importar de logica)
+        elif opcion == "4":
+                print("\n CONSULTAR CITA")
+                id_cita = validar_entero("ID de la cita: ")
+                cita = cit.consultar_cita(con, id_cita)
+                if cita:
+                                       
+                    print(f"\n Fecha: {cita[1]} |  Consultorio: {cita[2]}") 
+                    print(f" Descripción: {cita[3]} |  Estado: {"Pendiente" if cita[4] else "Completado"}")
+                    print(f" DUI Paciente: {cita[5]}")
+             
+#=-------------------------------------------
         else:
             print("--------------------")
             print("Opción no válida. Intente de nuevo.")
             print("--------------------")
             
+
+#------/*
+
 
 def consultas():
     while True:
