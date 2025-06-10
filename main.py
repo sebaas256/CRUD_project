@@ -48,13 +48,13 @@ def mostrar_menu():
 def pacientes():
     while True:
         print("Has seleccionado Pacientes")
+        print("0-Volver al menu principal")
         print("1-Agregar Paciente")
         print("2-Eliminar Paciente")
         print("3-Actualizar Paciente")
         print("4-Consultar Paciente")
         print("5-Mostrar todos los pacientes")
         print("6-Mostrar citas de un paciente")
-        print("7-Volver al menu principal")
         
         opcion = input("Seleccione una opción: ")
         
@@ -112,7 +112,7 @@ def pacientes():
             Dui = validar_entero("Digite el DUI del paciente que quiere buscar: ")
             pa.ConsultarCitas(con,Dui)
         
-        elif opcion == "7":
+        elif opcion == "0":
             break
         else:
             print("--------------------")
