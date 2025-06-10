@@ -31,8 +31,13 @@ def validar_correo(mensaje):
 def validar_texto(mensaje):
     while True:
         texto = input(mensaje)
-        if texto.strip():  # Verifica que no sea solo espacios en blanco
-            return texto
+        if texto.strip:  # Verifica que no sea solo espacios en blanco
+            if all(c.isalpha() or c.isspace() or ",." for c in texto):
+                return texto
+            else:
+                print("--------------------")
+                print("Error: El campo no puede contener numeros.")
+                print("--------------------")
         else:
             print("--------------------")
             print("Error: El campo no puede estar vacío.")
