@@ -53,4 +53,46 @@ def validar_fecha(mensaje):
         except ValueError:
             print("--------------------")
             print("Error: Formato de fecha inválido. Use 'AAAA-MM-DD'.")
-            print("--------------------")           
+            print("--------------------")
+
+def validar_Fecha_Hora(mensaje):
+    from datetime import datetime
+    while True:
+        fecha_str = input(mensaje)
+        try:
+            if "-" in fecha_str and ":" not in fecha_str:
+                return datetime.strptime(fecha_str, "%Y-%m-%d-%H-%M")
+            else:
+                fecha = datetime.strptime(fecha_str, "%Y-%m-%d %H:%M")
+            return fecha
+        except ValueError:
+            print("--------------------")
+            print("Error: Formato de fecha inválido. Use 'AAAA-MM-DD-HH-MM'.")
+            print("--------------------")
+
+#ESTADOS- transformar estados bool a string 
+def validar_estado():
+    ESTADOS = {
+        0: (True, "Pendiente"),
+        1: (False, "Completada"),
+        3: (False, "Cancelada")
+    }
+
+    while True:
+        print("\nEstados disponibles:")
+        print("0. Pendiente")
+        print("1. Completada")
+        print("3. Cancelada")
+        
+        try:
+            opcion_estado = int(input("Estado (0-Pendiente, 1-Completada, 3-Cancelada): "))
+            if opcion_estado in ESTADOS:
+                return ESTADOS[opcion_estado] #s
+            else:
+                print("--------------------")
+                print("Error: Opción inválida.")
+                print("--------------------")
+        except ValueError:
+            print("--------------------")
+            print("Error: Por favor ingrese un número válido.")
+            print("--------------------")
