@@ -302,6 +302,109 @@ order by P.Nombres, P.Apellidos asc;
 select Nombres, Apellidos
 from PACIENTES where Dui_Paciente in (select Dui_Paciente from CITAS where estado_cita = 1)
 
+--11 Listar todos los pacientes con nombres que comiencen con 'M'.
+Select * from PACIENTES
+WHERE Nombres Like 'M%'
+
+--12 Obtener las 3 citas más recientes programadas (por fecha).
+
+SELECT TOP 3 *
+FROM CITAS
+ORDER BY fecha_cita asc
+
+--13 Encontrar la fecha de la primera y la última consulta registrada.
+SELECT 
+    MIN(fecha_consulta) AS PrimeraConsulta, 
+    MAX(fecha_consulta) AS UltimaConsulta
+FROM CONSULTAS;
+
+--14 Obtener los nombres de todos los doctores sin duplicados.
+SELECT DISTINCT Nombres 
+FROM DOCTORES;
+
+--15 Listar todas las citas que están en estado 'Pendiente' o 'Cancelada'.
+SELECT 
+  Id_Cita,
+  fecha_cita,
+  consultorio,
+  descripcion,
+  CASE estado_cita
+    WHEN 0 THEN 'Pendiente'
+    WHEN 1 THEN 'Completada'
+  END AS estado_legible
+FROM CITAS;
+
+--16 Obtener el nombre del paciente, el nombre del doctor y el diagnóstico de todas las
+-- consultas realizadas, con los detalles de la cita asociada
+SELECT 
+    P.Nombres AS NombrePaciente,
+    D.Nombres AS NombreDoctor,
+    C.diagnostico,
+    CIT.fecha_cita
+FROM CONSULTAS C
+INNER JOIN DOCTORES D ON C.Id_Doctor = D.Id_Doctor
+INNER JOIN CITAS CIT ON C.Id_Cita = CIT.Id_Cita
+INNER JOIN PACIENTES P ON CIT.Dui_Paciente = P.Dui_Paciente;
+
+--17 Listar todos los pacientes y, para cada uno, mostrar el número de citas que tiene.
+SELECT 
+    P.Nombres,
+    P.Apellidos,
+    COUNT(C.Id_Cita) AS NumeroCitas
+FROM PACIENTES P
+LEFT JOIN CITAS C ON P.Dui_Paciente = C.Dui_Paciente
+GROUP BY P.Nombres, P.Apellidos;
+
+
+--18  Obtener los nombres de los doctores que tienen un número de consultas superior al promedio
+WITH ConsultasPorDoctor AS (
+    SELECT Id_Doctor, COUNT(*) AS TotalConsultas
+    FROM CONSULTAS
+    GROUP BY Id_Doctor
+),
+Promedio AS (
+    SELECT AVG(TotalConsultas) AS PromedioConsultas
+    FROM ConsultasPorDoctor
+)
+SELECT D.Nombres, D.Apellidos, C.TotalConsultas, P.PromedioConsultas
+FROM DOCTORES D
+JOIN ConsultasPorDoctor C ON D.Id_Doctor = C.Id_Doctor
+JOIN Promedio P ON 1 = 1;
+
+--19 Contar cuántas consultas ha tenido cada paciente.
+SELECT 
+  P.Nombres,
+  P.Apellidos,
+  COUNT(C.Id_Consulta) AS NumeroDeConsultas
+FROM PACIENTES P
+INNER JOIN CITAS CI ON P.Dui_Paciente = CI.Dui_Paciente
+INNER JOIN CONSULTAS C ON CI.Id_Cita = C.Id_Cita
+GROUP BY P.Nombres, P.Apellidos;
+
+--20 Listar las consultas que fueron realizadas en
+--fechas donde también hubo al menos una cita cancelada.
+SELECT 
+  C.Id_Consulta,
+  C.fecha_consulta,
+  CI.Id_Cita,
+  CI.fecha_cita,
+  CI.consultorio,
+  CI.descripcion,
+
+  CASE CI.estado_cita
+    WHEN 0 THEN 'Pendiente'
+    WHEN 1 THEN 'Completada'
+  END AS estado
+FROM CONSULTAS C
+INNER JOIN CITAS CI ON C.Id_Cita = CI.Id_Cita
+
+WHERE CI.fecha_cita IN (
+  SELECT fecha_cita
+  FROM CITAS
+  WHERE estado_cita = 1
+);
+
+
 
 
 --Vistas--
