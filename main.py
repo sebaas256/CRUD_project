@@ -4,7 +4,6 @@ from logica import Pacientes as pa
 from logica import Citas as cit
 from logica import Doctores as doc
 from logica import Consultas as cons
-
 from utils.validaciones import * 
 import os
 
@@ -39,7 +38,7 @@ def mostrar_menu():
             os.system('cls')
             doctores()
         elif opcion == "0":
-            print("Saliendo...")
+            print("Ah salido del programa.")
             break
         else:
             print("--------------------")
