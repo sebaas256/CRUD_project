@@ -27,7 +27,9 @@ def EliminarPaciente(Conexion, DUI):
         else :
             print(f"Error al eliminar el paciente: El paciente con el DUI: {DUI}, no existe. ")
     except Exception as e:
-        print("Error al eliminar el paciente:", e)
+        print("\n" + "="*50)
+        print("No se puede eleiminar el pacinete por que tiene una cita", e)
+        print("="*50)
         
 def ActualizarPaciente(Conexion, DUI, Nombres, Apellidos, Fecha_Nacimiento, Telefono, Direccion, Correo, dui):
     
