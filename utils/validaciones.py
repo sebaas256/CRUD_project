@@ -31,7 +31,7 @@ def validar_correo(mensaje):
 def validar_texto(mensaje):
     while True:
         texto = input(mensaje)
-        if texto.strip:  # Verifica que no sea solo espacios en blanco
+        if texto.strip():  # Verifica que no sea solo espacios en blanco
             if all(c.isalpha() or c.isspace() or c in ",." for c in texto):
                 return texto
             else:
