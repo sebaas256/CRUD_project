@@ -10,7 +10,7 @@ def agregar_consulta(Conexion, Id_Consulta, diagnostico, observaciones, fecha_co
             print(f"Ya existe una consulta con ID: {Id_Consulta}")
             print("="*50)
             return
-        
+        # Agregar la consulta y mostrar los datos de la consulta en formato de tabla
         sql = "INSERT INTO CONSULTAS VALUES (?, ?, ?, ?, ?, ?)"
         cursor.execute(sql, (Id_Consulta, diagnostico, observaciones, fecha_consulta, Id_Doctor, Id_Cita))
         Conexion.commit()
@@ -45,6 +45,7 @@ def eliminar_consulta(Conexion, Id_Consulta):
             print(f"No existe una consulta con ID: {Id_Consulta}")
             print("="*50)
             return
+        # Eliminar la consulta y mostrar un mensaje de confirmación
         sql = "DELETE FROM CONSULTAS WHERE Id_Consulta = ?"
         cursor.execute(sql, (Id_Consulta))
         Conexion.commit()
@@ -73,6 +74,7 @@ def actualizar_consulta(Conexion, diagnostico, observaciones, fecha_consulta, Id
             print(f"No existe una consulta con ID: {Id_Consulta_Original}")
             print("="*50)
             return
+        # Actualizar la consulta y mostrar los datos actualizados en formato de tabla
         sql = """
         UPDATE CONSULTAS
         SET diagnostico = ?, observaciones = ?, fecha_consulta = ?, Id_Doctor = ?, Id_Cita = ?
@@ -101,10 +103,11 @@ def actualizar_consulta(Conexion, diagnostico, observaciones, fecha_consulta, Id
 def buscar_consulta(Conexion, Id_Consulta):
     try:
         cursor = Conexion.cursor()
+        # Verificar si la consulta existe
         sql = 'SELECT * FROM CONSULTAS WHERE Id_Consulta = ?'
         cursor.execute(sql, (Id_Consulta,)) 
         consulta = cursor.fetchone()
-
+        # Si no se encuentra la consulta, mostrar un mensaje
         if not consulta:
             print("\n" + "="*50)
             print("No se encontró ninguna consulta con ese ID.\n")
@@ -123,7 +126,6 @@ def buscar_consulta(Conexion, Id_Consulta):
         print(f"{'ID Doctor:':<20} {consulta[4]}")
         print(f"{'ID Cita:':<20} {consulta[5]}")
         print("="*80)
-
     except Exception as e:
         print("\n" + "="*50)
         print(f"Error al buscar consulta: {e}")
@@ -132,19 +134,24 @@ def buscar_consulta(Conexion, Id_Consulta):
 def mostrar_consultas(Conexion):
     try:
         cursor = Conexion.cursor()
+        # Obtener todas las consultas de la base de datos
         sql = "SELECT * FROM CONSULTAS"
         cursor.execute(sql)
         consultas = cursor.fetchall()
+        # Si no hay consultas, mostrar un mensaje
         if not consultas:
             print("\n" + "="*50)
             print("No hay consultas registradas.")
             print("="*50)
             return
+        # Mostrar las consultas en formato de tabla
+        # El ancho de las columnas se ajusta a los datos para que la tabla se vea bien
         ancho_diag = 30
         ancho_obs = 30
         print("\n" + "="*100)
         print(f"{'ID':<5} {'DIAGNÓSTICO':<{ancho_diag}} {'OBSERVACIONES':<{ancho_obs}} {'FECHA':<12} {'ID DOCTOR':<10} {'ID CITA':<8}")
         print("="*100)
+        # Imprimir cada consulta en una fila de la tabla
         for fila in consultas:
             diag = (fila[1][:ancho_diag-3] + '...') if len(fila[1]) > ancho_diag else fila[1]
             obs = (fila[2][:ancho_obs-3] + '...') if len(fila[2]) > ancho_obs else fila[2]

@@ -179,7 +179,7 @@ def citas():
 
 #------/*
 
-
+# Menú de opciones para Consultas
 def consultas():
     while True:
         print("Has seleccionado Consultas") 
@@ -193,9 +193,11 @@ def consultas():
 
         #Limpiar consola
         os.system('cls')
+        # Si escogió la opción 0, salir del bucle
         if opcion == "0":
             break
 
+        # Pedir datos para la consulta
         elif opcion == "1":
             Id_Consulta = validar_entero("Digite el Id de la consulta: ")
             Diagnostico = validar_texto("Digite el diagnostico de la consulta: ")
@@ -205,10 +207,12 @@ def consultas():
             ID_Cita = validar_entero("Digite el Id de la cita asociada a la consulta: ")
             cons.agregar_consulta(con, Id_Consulta, Diagnostico, Observaciones, Fecha_Consulta, ID_Doctor, ID_Cita)
 
+        # Pedir el ID de la consulta a eliminar, actualizar o buscar
         elif opcion == "2":
             Id_Consulta = validar_entero("Digite el Id de la consulta que desea eliminar: ")
             cons.eliminar_consulta(con, Id_Consulta)
-            
+        
+        # Pedir el ID de la consulta a actualizar y los nuevos datos
         elif opcion == "3":
             Id_Consulta = validar_entero("Digite el Id de la consulta que desea actualizar: ")
             Diagnostico = validar_texto("Digite el nuevo diagnostico de la consulta: ")
@@ -218,10 +222,12 @@ def consultas():
             ID_Cita = validar_entero("Digite el nuevo Id de la cita asociada a la consulta: ")
             cons.actualizar_consulta(con, Diagnostico, Observaciones, Fecha_Consulta, ID_Doctor, ID_Cita, Id_Consulta)
 
+        # Pedir el ID de la consulta a buscar
         elif opcion == "4":
             Id_Consulta = validar_entero("Digite el Id de la consulta que desea buscar: ")
             cons.buscar_consulta(con, Id_Consulta)
         
+        # Mostrar todas las consultas
         elif opcion == "5":
             cons.mostrar_consultas(con)
 
