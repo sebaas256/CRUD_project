@@ -96,3 +96,4 @@ def validar_estado():
             print("--------------------")
             print("Error: Por favor ingrese un número válido.")
             print("--------------------")
+            
