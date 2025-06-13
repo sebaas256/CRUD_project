@@ -97,3 +97,20 @@ def validar_estado():
             print("Error: Por favor ingrese un número válido.")
             print("--------------------")
             
+def validar_dui(mensaje):
+    while True:
+        try:
+            valor = input(mensaje)
+            if valor.isdigit(): 
+                if len(valor) == 9:
+                    return valor    
+                else:
+                    print("--------------------")
+                    print(f"Error: Ingrese los 9 digitos de su DUI!!!")
+                    print("--------------------")
+            else:
+                raise Exception("")
+        except Exception as e:
+            print("--------------------")
+            print("Error: Por favor ingrese un numero entero valido")
+            print("--------------------")
