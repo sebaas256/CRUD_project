@@ -39,7 +39,7 @@ def mostrar_menu():
             os.system('cls')
             doctores()
         elif opcion == "0":
-            print("Saliendo...")
+            print("Ah salido del programa")
             break
         else:
             print("--------------------")
@@ -64,7 +64,7 @@ def pacientes():
         if opcion == "1":
             
             #variables
-            Dui = validar_entero("Digite el DUI del paciente: ")
+            Dui = validar_dui("Digite el DUI del paciente: ")
             Nombres = validar_texto("Digite el nombres del paciente: ")
             Apellidos = validar_texto("Digite el apellidos del paciente: ")
             Fecha_Nacimiento = validar_fecha("Digite la fecha de nacimiento del paciente (AAAA-MM-DD): ")
@@ -78,21 +78,21 @@ def pacientes():
         elif opcion == "2":
             
             #variables
-            Dui = validar_entero("Digite el DUI del paciente que quiere eliminar:")
+            Dui = validar_dui("Digite el DUI del paciente que quiere eliminar:")
             #Eliminar Paciente
             pa.EliminarPaciente(con, Dui)
                 
         elif opcion == "3":
 
             #variables
-            Dui = validar_entero("Digite el DUI del paciente a quien desea modificar: ")
+            Dui = validar_dui("Digite el DUI del paciente a quien desea modificar: ")
             Nombres = validar_texto("Digite el nombres del paciente: ")
             Apellidos = validar_texto("Digite el apellidos del paciente: ")
             Fecha_Nacimiento = validar_fecha("Digite la fecha de nacimiento del paciente (AAAA-MM-DD): ")
             Telefono = validar_telefono("Digite el telefono del paciente: ")
             Direccion = validar_texto("Digite la direccion del paciente: ")
             Correo = validar_correo("Digite el correo del paciente: ")
-            dui = validar_entero("Digite el nuevo DUI del paciente: ")
+            dui = validar_dui("Digite el nuevo DUI del paciente: ")
             
             # Codigo para actualizar paciente (importar de logica)
             pa.ActualizarPaciente(con, dui, Nombres, Apellidos, Fecha_Nacimiento, Telefono, Direccion, Correo, Dui)
@@ -100,7 +100,7 @@ def pacientes():
         elif opcion == "4":
             
             #variables
-            Dui = validar_entero("Digite el DUI del paciente que quiere buscar: ")
+            Dui = validar_dui("Digite el DUI del paciente que quiere buscar: ")
             # Codigo para consultar paciente (importar de logica)
             pa.BuscarPaciente(con, Dui)            
             
@@ -110,14 +110,14 @@ def pacientes():
         
         elif opcion == "6":
             
-            Dui = validar_entero("Digite el DUI del paciente que quiere buscar: ")
+            Dui = validar_dui("Digite el DUI del paciente que quiere buscar: ")
             pa.ConsultarCitas(con,Dui)
         
         elif opcion == "0":
             break
         else:
             print("--------------------")
-            print("Opción no v1álida. Intente de nuevo.")
+            print("Opción no válida. Intente de nuevo.")
             print("--------------------")
             
 #CITAS------
