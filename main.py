@@ -4,6 +4,7 @@ from logica import Pacientes as pa
 from logica import Citas as cit
 from logica import Doctores as doc
 from logica import Consultas as cons
+
 from utils.validaciones import * 
 import os
 
@@ -38,7 +39,7 @@ def mostrar_menu():
             os.system('cls')
             doctores()
         elif opcion == "0":
-            print("Ah salido del programa.")
+            print("Saliendo...")
             break
         else:
             print("--------------------")
@@ -63,7 +64,7 @@ def pacientes():
         if opcion == "1":
             
             #variables
-            Dui = validar_dui("Digite el DUI del paciente: ")
+            Dui = validar_entero("Digite el DUI del paciente: ")
             Nombres = validar_texto("Digite el nombres del paciente: ")
             Apellidos = validar_texto("Digite el apellidos del paciente: ")
             Fecha_Nacimiento = validar_fecha("Digite la fecha de nacimiento del paciente (AAAA-MM-DD): ")
@@ -72,25 +73,26 @@ def pacientes():
             Correo = validar_correo("Digite el correo del paciente: ")
             #Agregar Paciente
             pa.AgregarPacientes(con, Dui, Nombres, Apellidos, Fecha_Nacimiento, Telefono,Direccion, Correo)
-                
+
+
         elif opcion == "2":
             
             #variables
-            Dui = validar_dui("Digite el DUI del paciente que quiere eliminar:")
+            Dui = validar_entero("Digite el DUI del paciente que quiere eliminar:")
             #Eliminar Paciente
             pa.EliminarPaciente(con, Dui)
                 
         elif opcion == "3":
 
             #variables
-            Dui = validar_dui("Digite el DUI del paciente a quien desea modificar: ")
+            Dui = validar_entero("Digite el DUI del paciente a quien desea modificar: ")
             Nombres = validar_texto("Digite el nombres del paciente: ")
             Apellidos = validar_texto("Digite el apellidos del paciente: ")
             Fecha_Nacimiento = validar_fecha("Digite la fecha de nacimiento del paciente (AAAA-MM-DD): ")
             Telefono = validar_telefono("Digite el telefono del paciente: ")
             Direccion = validar_texto("Digite la direccion del paciente: ")
             Correo = validar_correo("Digite el correo del paciente: ")
-            dui = validar_dui("Digite el nuevo DUI del paciente: ")
+            dui = validar_entero("Digite el nuevo DUI del paciente: ")
             
             # Codigo para actualizar paciente (importar de logica)
             pa.ActualizarPaciente(con, dui, Nombres, Apellidos, Fecha_Nacimiento, Telefono, Direccion, Correo, Dui)
@@ -98,7 +100,7 @@ def pacientes():
         elif opcion == "4":
             
             #variables
-            Dui = validar_dui("Digite el DUI del paciente que quiere buscar: ")
+            Dui = validar_entero("Digite el DUI del paciente que quiere buscar: ")
             # Codigo para consultar paciente (importar de logica)
             pa.BuscarPaciente(con, Dui)            
             
@@ -108,14 +110,14 @@ def pacientes():
         
         elif opcion == "6":
             
-            Dui = validar_dui("Digite el DUI del paciente que quiere buscar: ")
+            Dui = validar_entero("Digite el DUI del paciente que quiere buscar: ")
             pa.ConsultarCitas(con,Dui)
         
         elif opcion == "0":
             break
         else:
             print("--------------------")
-            print("Opción no válida. Intente de nuevo.")
+            print("Opción no v1álida. Intente de nuevo.")
             print("--------------------")
             
 #CITAS------
@@ -123,62 +125,91 @@ def pacientes():
 def citas():
     while True:
         print("Has seleccionado Citas")
+        print("0-Volver al menu principal")
         print("1-Agregar cita")
         print("2-Eliminar cita")
         print("3-Actualizar cita")
         print("4-Consultar cita")
-        print("0-Volver al menu principal")
+        print("5-Ver citas")
         opcion = input("Seleccione una opción: ")
-
+        
+        os.system('cls')
+        
         if opcion == "0":
             break
 
 #Codigo para agregar paciente (importar de logica)
         if opcion == "1":
-            print("\nS AGREGAR CITA")
+            print("\n AGREGAR CITA")
             id_cita = validar_entero("ID de la cita: ")
             fecha_cita = validar_Fecha_Hora("Fecha (AAAA-MM-DD HH:MM): ")
             consultorio = input("Consultorio: ")
             descripcion = input("Descripción: ")
-            estado_cita = validar_estado()            
+            estado_cita = 0           
             dui_paciente = input("DUI del paciente: ")
             if cit.agregar_cita(con, id_cita, fecha_cita, consultorio, descripcion, estado_cita, dui_paciente):
-                print("Cita agregada!")
-#Codigo para eliminar paciente (importar de logica)
+                        print("¡CITA AGREGADA!")
+                        print("=" * 60)
+                        print(f"\nDETALLES DE LA CITA:")
+                        print(f"ID Cita: {id_cita}")
+                        print(f"Fecha y Hora: {fecha_cita}")
+                        print(f"Consultorio: {consultorio}")
+                        print(f"Descripción: {descripcion}")
+                        print(f"Estado: {'Pendiente' if estado_cita == 0 else 'Completada'}")
+                        print(f"DUI Paciente: {dui_paciente}")
+                        print("=" * 60)
+
+            else:
+                        print("No se pudo agregar. Verifique los datos.")
+            
+
+#Codigo para eliminar cita 
         elif opcion == "2":
             id_cita = validar_entero("ID de la cita a eliminar: ")
             if cit.eliminar_cita(con, id_cita):
+                print("\n" + "="*60)
                 print("Cita eliminada!")
-#Codigo para actualizar paciente (importar de logica)
+                print("\n" + "="*60)
+
+#Codigo para actualizar cita (importar de logica)
         elif opcion == "3":
             id_cita = validar_entero("ID de la cita: ")
-            nueva_fecha = validar_Fecha_Hora("Nueva fecha (AAAA-MM-DD-HH-MM): ")
-            nuevo_estado = validar_estado()
-            if cit.actualizar_cita(con, id_cita, nueva_fecha, nuevo_estado):
+            nueva_fecha = validar_Fecha_Hora("Nueva fecha (AAAA-MM-DD HH:MM): ")
+            nuevo_consultorio = validar_texto ("Inserte nuevo consultorio:  " )
+            nueva_descripcion = validar_texto ("Inserte nueva descripcion:  ")
+            #nuevo_estado = validar_estado()
+            if cit.actualizar_cita(con, id_cita, nueva_fecha, nuevo_consultorio, nueva_descripcion):
+                    print("\n" + "="*60)
                     print("Cita actualizada!")
+                    print("Los Nuevos datos son")
+                    print(f"{'ID Cita:':<25} {id_cita}") 
+                    print(f"{'Nueva Fecha:':<25} {nueva_fecha}")
+                    print(f"{'Nuevo consultorio:':<25} {nuevo_consultorio}")
+                    print(f"{'Nueva descripcion:':<25} {nueva_descripcion}")
+                    #print(f"{'Estado:':<25} {nuevo_estado}") 
+                    print("=" * 60 + "\n")
+
             else:
                 print("Error al Actualizar la cita.")
-#Codigo para consultar paciente (importar de logica)
+#Codigo para consultar cita (importar de logica
         elif opcion == "4":
-                print("\n CONSULTAR CITA")
                 id_cita = validar_entero("ID de la cita: ")
-                cita = cit.consultar_cita(con, id_cita)
-                if cita:
-                                       
-                    print(f"\n Fecha: {cita[1]} |  Consultorio: {cita[2]}") 
-                    print(f" Descripción: {cita[3]} |  Estado: {"Pendiente" if cita[4] else "Completado"}")
-                    print(f" DUI Paciente: {cita[5]}")
-             
-#=-------------------------------------------
+                cit.consultar_cita(con, id_cita)
+
+#5
+        elif opcion == "5":
+                cit.MostrarCitas(con)
+#end
         else:
-            print("--------------------")
-            print("Opción no válida. Intente de nuevo.")
-            print("--------------------")
+                print("\n" + "="*60)
+                print("Opción no válida. Intente de nuevo.")
+                print("\n" + "="*60)
+
             
 
 #------/*
 
-# Menú de opciones para Consultas
+
 def consultas():
     while True:
         print("Has seleccionado Consultas") 
@@ -192,11 +223,9 @@ def consultas():
 
         #Limpiar consola
         os.system('cls')
-        # Si escogió la opción 0, salir del bucle
         if opcion == "0":
             break
 
-        # Pedir datos para la consulta
         elif opcion == "1":
             Id_Consulta = validar_entero("Digite el Id de la consulta: ")
             Diagnostico = validar_texto("Digite el diagnostico de la consulta: ")
@@ -206,12 +235,10 @@ def consultas():
             ID_Cita = validar_entero("Digite el Id de la cita asociada a la consulta: ")
             cons.agregar_consulta(con, Id_Consulta, Diagnostico, Observaciones, Fecha_Consulta, ID_Doctor, ID_Cita)
 
-        # Pedir el ID de la consulta a eliminar, actualizar o buscar
         elif opcion == "2":
             Id_Consulta = validar_entero("Digite el Id de la consulta que desea eliminar: ")
             cons.eliminar_consulta(con, Id_Consulta)
-        
-        # Pedir el ID de la consulta a actualizar y los nuevos datos
+            
         elif opcion == "3":
             Id_Consulta = validar_entero("Digite el Id de la consulta que desea actualizar: ")
             Diagnostico = validar_texto("Digite el nuevo diagnostico de la consulta: ")
@@ -221,12 +248,10 @@ def consultas():
             ID_Cita = validar_entero("Digite el nuevo Id de la cita asociada a la consulta: ")
             cons.actualizar_consulta(con, Diagnostico, Observaciones, Fecha_Consulta, ID_Doctor, ID_Cita, Id_Consulta)
 
-        # Pedir el ID de la consulta a buscar
         elif opcion == "4":
             Id_Consulta = validar_entero("Digite el Id de la consulta que desea buscar: ")
             cons.buscar_consulta(con, Id_Consulta)
         
-        # Mostrar todas las consultas
         elif opcion == "5":
             cons.mostrar_consultas(con)
 
